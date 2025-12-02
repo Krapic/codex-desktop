@@ -1,0 +1,49 @@
+{
+  "name": "codex-desktop",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "npm run dev:clean-ports && concurrently -k \"npm:dev:renderer\" \"npm:dev:electron\"",
+    "dev:clean-ports": "kill-port 5173 5175 || exit 0",
+    "dev:renderer": "vite --port 5175 --strictPort",
+    "dev:electron": "wait-on http://localhost:5175 && cross-env ELECTRON_ENV=development VITE_DEV_SERVER_URL=http://localhost:5175 electron .",
+    "build": "vite build",
+    "preview": "vite preview",
+    "dist": "npm run build && electron-builder"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "electron-builder": "^26.0.12",
+    "kill-port": "^2.0.1",
+    "typescript": "~5.9.3",
+    "vite": "^7.2.4"
+  },
+  "dependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^39.2.4",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "wait-on": "^9.0.3"
+  },
+  "build": {
+    "appId": "com.codex.desktop",
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "build"
+    },
+    "win": {
+      "target": "nsis"
+    }
+  }
+}
